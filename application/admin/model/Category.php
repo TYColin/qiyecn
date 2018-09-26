@@ -130,4 +130,17 @@ class Category extends Model
         }
         return true;
     }
+
+    //获取子栏目的id,包括自身id
+    public static function getChildids($id){
+        $res = static::where('pid',$id)->field('id')->select();
+
+        static $arr = array();
+        foreach ($res as $v){
+            $arr[]=$v['id'];
+            static::getChildids($v['id']);
+        }
+
+        return $arr;
+    }
 }

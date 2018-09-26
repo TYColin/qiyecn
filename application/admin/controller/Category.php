@@ -66,11 +66,17 @@ class Category extends Common
 
         if ($request->isPost()){
             $data = $request->post();
+            $cateids = CategoryModel::getChildids($id);
+            $cateids[] = $id;
+            if (in_array($data['pid'],$cateids)){
+                $this->error('上级栏目选择错误');
+            }
             $result = CategoryModel::where('id',$id)->update($data);
             if($result){
                 $this->success('修改成功','category/index');
             }
             $this->error('更新失败');
+
         }
         $res = CategoryModel::all();
         $catename = CategoryModel::get($id);
