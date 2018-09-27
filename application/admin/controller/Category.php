@@ -19,11 +19,14 @@ class Category extends Common
     public function index(){
 
         $res = CategoryModel::order('sort desc,id asc')->select();
+
         CategoryModel::getCate($res,0,-1,$cate);
         $count = CategoryModel::count();
+        //$cateObj = CategoryModel::array_to_object($cate);
 
         $this->assign('cate',$cate);
         $this->assign('count',$count);
+//        $this->assign('page',$page);
         //记得return,如果前端页面没显示，也没报错，可能是没有return
         return $this->fetch('index');
     }
@@ -35,6 +38,7 @@ class Category extends Common
 
         if ($request->isPost()){
             $data = $request->post();
+
             $result = CategoryModel::create($data);
             if ($result){
                 $this->success('栏目添加成功');
@@ -87,5 +91,17 @@ class Category extends Common
             'catename'=>$catename,
         ]);
         return $this->fetch('edit');
+    }
+
+    //栏目删除
+    public function del($id){
+        $res = CategoryModel::where('pid',$id)->select();
+        if ($res){
+            $this->error('当前栏目有子栏目，不能删除');
+        }
+        if (CategoryModel::destroy($id)){
+            $this->success('删除成功');
+        }
+        $this->error('删除失败');
     }
 }

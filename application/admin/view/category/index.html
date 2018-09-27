@@ -20,7 +20,7 @@
 
     <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"  href="javascript:location.replace(location.href);" title="刷新"><i class="layui-icon" style="line-height:30px">ဂ</i></a>
 </div>
-<div class="x-body">
+<div class="x-body"  style="padding-bottom: 60px">
     <xblock><span class="x-right" style="line-height:40px">共有数据：{$count} 条</span></xblock>
     <form action="{:url('category/sort')}" method="post">
         <div>
@@ -63,7 +63,7 @@
                     <a title="编辑" href="{:url('category/edit',['id'=>$vo['id']])}" style="text-decoration:none">
                         <i class="layui-icon">&#xe642;</i>
                     </a>
-                    <a title="删除" class="del" href=""
+                    <a title="删除" class="del" href="{:url('category/del',['id'=>$vo.id])}"
                        style="text-decoration:none">
                         <i class="layui-icon">&#xe640;</i>
                     </a>
@@ -75,6 +75,7 @@
         </table>
 
     </form>
+
     <div id="page"></div>
 </div>
 <script src="__ADMIN__/vendor/js/jquery.js"></script>
@@ -85,7 +86,7 @@
         var layer = layui.layer;
         $(".del").on('click',function () {
             var url=$(this).attr('href');
-            layer.confirm('确定要删除该管理员吗?', {icon: 3, title:'温馨提示'}, function(index){
+            layer.confirm('确定要删除该栏目吗?', {icon: 3, title:'温馨提示'}, function(index){
                 //do something
                 location.href=url;
                 layer.close(index);

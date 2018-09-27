@@ -15,30 +15,31 @@ class Category extends Model
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\exception\DbException
      */
-    public static function getCategory($pid=0,$level=-1){
+    public static function getCategory($pid = 0, $level = -1)
+    {
         //获取$pid的所有数据
-        $res = self::where('pid',$pid)->select();
+        $res = self::where('pid', $pid)->select();
         //定义一个静态数组，用于存储有用的数据
-        static $arr=array();
+        static $arr = array();
         //每次调用，将层级数加1
         $level += 1;
-        if ($level == 0){
+        if ($level == 0) {
             $str = "";
-        }else{
+        } else {
             $str = "|";
         }
         //遍历取出$res中的所有数据
-        foreach ($res as $v){
+        foreach ($res as $v) {
             //创建一个临时数组，保存一条有用的数据,
-            $tmp_arr=array();
-            $tmp_arr['id']=$v['id'];
+            $tmp_arr = array();
+            $tmp_arr['id'] = $v['id'];
             //str_repeat()函数循环输出给定字符
-            $tmp_arr['name']=$str.str_repeat("----",$level).$v['name'];
-            $tmp_arr['pid']=$v['pid'];
+            $tmp_arr['name'] = $str . str_repeat("----", $level) . $v['name'];
+            $tmp_arr['pid'] = $v['pid'];
             //因为前端数据输出时使用 {volist}, 是一个二维数组，这里需要返回一个二维数组，每调用一次将结果添加到$arr中
-            $arr[]=$tmp_arr;
+            $arr[] = $tmp_arr;
             //递归调用本方法，传入的$pid为当前数据的id
-            self::getCategory($v['id'],$level);
+            self::getCategory($v['id'], $level);
         }
         return $arr;
     }
@@ -52,31 +53,32 @@ class Category extends Model
      * @param int $level 层级数
      * @return array
      */
-    public static function getCateall($data,$pid=0,$level=-1){
+    public static function getCateall($data, $pid = 0, $level = -1)
+    {
         //获取$pid的所有数据
         //$res = self::where('pid',$pid)->select();
         //定义一个静态数组，用于存储有用的数据
-        static $arr=array();
+        static $arr = array();
         //每次调用，将层级数加1
         $level += 1;
-        if ($level == 0){
+        if ($level == 0) {
             $str = "";
-        }else{
+        } else {
             $str = "|";
         }
         //遍历取出$res中的所有数据
-        foreach ($data as $v){
-            if ($pid == $v['pid']){
+        foreach ($data as $v) {
+            if ($pid == $v['pid']) {
                 //创建一个临时数组，保存一条有用的数据,
-                $tmp_arr=array();
-                $tmp_arr['id']=$v['id'];
+                $tmp_arr = array();
+                $tmp_arr['id'] = $v['id'];
                 //str_repeat()函数循环输出给定字符
-                $tmp_arr['name']=$str.str_repeat("----",$level).$v['name'];
-                $tmp_arr['pid']=$v['pid'];
+                $tmp_arr['name'] = $str . str_repeat("----", $level) . $v['name'];
+                $tmp_arr['pid'] = $v['pid'];
                 //因为前端数据输出时使用 {volist}, 是一个二维数组，这里需要返回一个二维数组，每调用一次将结果添加到$arr中
-                $arr[]=$tmp_arr;
+                $arr[] = $tmp_arr;
                 //递归调用本方法，传入的$pid为当前数据的id
-                self::getCateall($data,$v['id'],$level);
+                self::getCateall($data, $v['id'], $level);
                 //有用数据保存后将其销毁
                 unset($v);
             }
@@ -86,32 +88,33 @@ class Category extends Model
     }
 
     //获取栏目列表--引用方式
-    public static function getCate($data,$pid=0,$level=-1,&$arr=[]){
+    public static function getCate($data, $pid = 0, $level = -1, &$arr = [])
+    {
         //获取$pid的所有数据
         //$res = self::where('pid',$pid)->select();
         //定义一个静态数组，用于存储有用的数据
         //static $arr=array();
         //每次调用，将层级数加1
         $level += 1;
-        if ($level == 0){
+        if ($level == 0) {
             $str = "";
-        }else{
+        } else {
             $str = "|";
         }
         //遍历取出$res中的所有数据
-        foreach ($data as $v){
-            if ($pid == $v['pid']){
+        foreach ($data as $v) {
+            if ($pid == $v['pid']) {
                 //创建一个临时数组，保存一条有用的数据,
-                $tmp_arr=array();
-                $tmp_arr['id']=$v['id'];
+                $tmp_arr = array();
+                $tmp_arr['id'] = $v['id'];
                 //str_repeat()函数循环输出给定字符
-                $tmp_arr['name']=$str.str_repeat("----",$level).$v['name'];
-                $tmp_arr['pid']=$v['pid'];
-                $tmp_arr['sort']=$v['sort'];
+                $tmp_arr['name'] = $str . str_repeat("----", $level) . $v['name'];
+                $tmp_arr['pid'] = $v['pid'];
+                $tmp_arr['sort'] = $v['sort'];
                 //因为前端数据输出时使用 {volist}, 是一个二维数组，这里需要返回一个二维数组，每调用一次将结果添加到$arr中
-                $arr[]=$tmp_arr;
+                $arr[] = $tmp_arr;
                 //递归调用本方法，传入的$pid为当前数据的id
-                self::getCate($data,$v['id'],$level,$arr);
+                self::getCate($data, $v['id'], $level, $arr);
                 //有用数据保存后将其销毁
                 unset($v);
             }
@@ -121,10 +124,11 @@ class Category extends Model
     }
 
     //更新栏目排序
-    public static function sort($data){
-        if ($data){
-            foreach ($data as $id=>$v){
-                self::where('id',$id)->update(['sort'=>$v]);
+    public static function sort($data)
+    {
+        if ($data) {
+            foreach ($data as $id => $v) {
+                self::where('id', $id)->update(['sort' => $v]);
             }
 
         }
@@ -132,15 +136,31 @@ class Category extends Model
     }
 
     //获取子栏目的id,包括自身id
-    public static function getChildids($id){
-        $res = static::where('pid',$id)->field('id')->select();
+    public static function getChildids($id)
+    {
+        $res = static::where('pid', $id)->field('id')->select();
 
         static $arr = array();
-        foreach ($res as $v){
-            $arr[]=$v['id'];
+        foreach ($res as $v) {
+            $arr[] = $v['id'];
             static::getChildids($v['id']);
         }
 
         return $arr;
     }
+
+    //数组转对象
+    public static function array_to_object($arr)
+    {
+        if (gettype($arr) != 'array') {
+            return;
+        }
+        foreach ($arr as $k => $v) {
+            if (gettype($v) == 'array' || getType($v) == 'object') {
+                $arr[$k] = (object)self::array_to_object($v);
+            }
+        }
+        return (object)$arr;
+    }
+
 }

@@ -8,29 +8,83 @@
     <link rel="stylesheet" href="__ADMIN__/vendor/layui/css/layui.css">
     <link rel="stylesheet" href="__ADMIN__/custom/css/style.css">
 </head>
-<body style="padding:0 10px;margin-bottom:50px;">
-<div style="padding-top: 20px;">
+<body style="padding:0 10px 45px 10px;margin-bottom:50px;">
+<div>
     <form id="addForm" class="layui-form" action="?" method="post">
-        <div class="layui-form-item">
-            <label class="layui-form-label">上级栏目</label>
-            <div class="layui-input-inline">
-                <select name="pid" lay-verify="required">
-                    <option value="0">顶级栏目</option>
-                    {volist name="cate" id="vo"}
-                    <option value="{$vo.id}">{$vo.name}</option>
-                    {/volist}
-                </select>
+        <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">基本设置</li>
+                <li>扩展设置</li>
+                <li>内容设置</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show layui-anim layui-anim-upbit">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">上级栏目</label>
+                        <div class="layui-input-inline">
+                            <select name="pid" lay-verify="required">
+                                <option value="0">顶级栏目</option>
+                                {volist name="cate" id="vo"}
+                                <option value="{$vo.id}">{$vo.name}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" >栏目名称</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="name" required placeholder="请输入栏目名称" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" >栏目排序</label>
+                        <div class="layui-input-inline">
+                            <input type="text" value="100" name="sort" placeholder="请输入栏目排序" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-tab-item layui-anim layui-anim-upbit">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" >栏目图片</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="pic" placeholder="请输入栏目图片" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" >关键字</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="keyword" placeholder="请输入关键字" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" >描述</label>
+                        <div class="layui-input-block">
+                            <textarea name="description" placeholder="请输入描述" class="layui-textarea"></textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" >摘要</label>
+                        <div class="layui-input-block">
+                            <textarea name="remark" placeholder="请输入摘要" class="layui-textarea"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-tab-item layui-anim layui-anim-upbit">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" >内容</label>
+                        <div class="layui-input-block">
+                            <div id="content" name="content" type="text/plain" style="height: 260px"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+
+
         <div class="layui-form-item">
-            <label class="layui-form-label" >栏目名称</label>
-            <div class="layui-input-inline">
-                <input type="text" name="name" required placeholder="请输入栏目名称" autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <div class="layui-input-block">
-                <button class="layui-btn" lay-submit lay-filter="formDemo">添加</button>
+            <label class="layui-form-label" ></label>
+            <div class="">
+                <button class="layui-btn" lay-submit lay-filter="formDemo" style="margin-left: 8px">添加</button>
             </div>
         </div>
     </form>
@@ -38,12 +92,18 @@
 <script src="__ADMIN__/vendor/js/jquery.js"></script>
 <script src="__ADMIN__/vendor/layui/layui.js"></script>
 <script src="__ADMIN__/custom/js/admin.js"></script>
+<!-- 配置文件 -->
+<script type="text/javascript" src="__ADMIN__/vendor/ueditor/ueditor.config.js"></script>
+<!-- 编辑器源码文件 -->
+<script type="text/javascript" src="__ADMIN__/vendor/ueditor/ueditor.all.js"></script>
 <script>
+    var ue = UE.getEditor('content');
     //前端表单验证
-    layui.use(['form','layer'], function() {
+    layui.use(['form','layer','element'], function() {
         $ = layui.jquery;
         var form = layui.form
             , layer = layui.layer;
+        var element = layui.element;
 
         //自定义验证规则
         form.verify({
