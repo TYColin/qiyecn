@@ -8,6 +8,26 @@
     <link rel="stylesheet" href="__ADMIN__/vendor/layui/css/layui.css">
     <link rel="stylesheet" href="__ADMIN__/custom/css/style.css">
 </head>
+<style>
+    .img_wrap{
+        position: relative;
+        display: inline-block;
+    }
+    .img_wrap img{
+        margin-top: 8px;
+        border:1px solid #ddd;
+        padding: 3px;
+        -webkit-border-radius: 8px;
+        -moz-border-radius: 8px;
+        border-radius: 8px;
+    }
+    .img_wrap .del_img {
+        position: absolute;
+        top: 12px;
+        right: 4px;
+    }
+
+</style>
 <body style="padding:0 10px 45px 10px;margin-bottom:50px;">
 <div>
     <form id="addForm" class="layui-form" action="?" method="post">
@@ -48,6 +68,18 @@
                         <label class="layui-form-label" >栏目图片</label>
                         <div class="layui-input-block">
                             <input type="text" name="pic" placeholder="请输入栏目图片" autocomplete="off" class="layui-input">
+                            <div id="column_img">
+                                <button type="button" class="layui-btn" id="upload_img">
+                                    <i class="layui-icon">&#xe67c;</i>上传栏目图片
+                                </button>
+                            </div>
+                            <span class="img_wrap">
+                                <img src="http://hiphotos.baidu.com/news/crop%3D0%2C30%2C816%2C548%3Bq%3D80%3B/sign=f7ca0b36ac8b87d6440df15f3a38040b/38dbb6fd5266d0164df2272f9a2bd40734fa35c9.jpg" alt="" height="80px">
+                                <button class="layui-btn  layui-btn-mini layui-btn-danger del_img">
+                                    <i class="layui-icon">&#xe640;</i>
+                                </button>
+                            </span>
+
                         </div>
                     </div>
                     <div class="layui-form-item">
@@ -99,16 +131,37 @@
 <script>
     var ue = UE.getEditor('content');
     //前端表单验证
-    layui.use(['form','layer','element'], function() {
+    layui.use(['form','layer','element','upload'], function() {
         $ = layui.jquery;
         var form = layui.form
             , layer = layui.layer;
         var element = layui.element;
-
+        var upload = layui.upload;
         //自定义验证规则
         form.verify({
 
     });
+        //执行上传
+        var uploadInst = upload.render({
+            elem: '#upload_img' //绑定元素
+            ,url: '{:url("category/uploadimg")}' //上传接口
+            ,accept: 'images'
+            ,field: 'imgfile'
+            ,size: 2048
+            ,before: function () {
+                var index = layer.load();
+            }
+            ,done: function(res){
+                //上传完毕回调
+                layer.closeAll('loading',{isOutAnim:true}); //关闭加载层
+                setTimeout(function () {
+                    layer.msg('上传成功');
+                },500);
+            }
+            ,error: function(){
+                //请求异常回调
+            }
+        });
         //异步提交
         // form.on('submit(formDemo)', function () {
         //     $.ajax({

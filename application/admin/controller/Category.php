@@ -104,4 +104,9 @@ class Category extends Common
         }
         $this->error('删除失败');
     }
+
+    //上传栏目图片
+    public function uploadimg(){
+        return json(['msg'=>'上传成功']);
+    }
 }
