@@ -12,6 +12,7 @@
     .img_wrap{
         position: relative;
         display: inline-block;
+        margin-right: 8px;
     }
     .img_wrap img{
         margin-top: 8px;
@@ -67,18 +68,13 @@
                     <div class="layui-form-item">
                         <label class="layui-form-label" >栏目图片</label>
                         <div class="layui-input-block">
-                            <input type="text" name="pic" placeholder="请输入栏目图片" autocomplete="off" class="layui-input">
+                            <input type="text" name="pic" placeholder="请上传栏目图片" autocomplete="off" class="layui-input img_name">
                             <div id="column_img">
                                 <button type="button" class="layui-btn" id="upload_img">
                                     <i class="layui-icon">&#xe67c;</i>上传栏目图片
                                 </button>
                             </div>
-                            <span class="img_wrap">
-                                <img src="http://hiphotos.baidu.com/news/crop%3D0%2C30%2C816%2C548%3Bq%3D80%3B/sign=f7ca0b36ac8b87d6440df15f3a38040b/38dbb6fd5266d0164df2272f9a2bd40734fa35c9.jpg" alt="" height="80px">
-                                <button class="layui-btn  layui-btn-mini layui-btn-danger del_img">
-                                    <i class="layui-icon">&#xe640;</i>
-                                </button>
-                            </span>
+                            <div id="category_img"></div>
 
                         </div>
                     </div>
@@ -155,7 +151,18 @@
                 //上传完毕回调
                 layer.closeAll('loading',{isOutAnim:true}); //关闭加载层
                 setTimeout(function () {
-                    layer.msg('上传成功');
+                    layer.msg(res.msg);
+                    if (res.code == 1){
+                        var str;
+                        str ='<span class="img_wrap">';
+                        str = str + '<img src='+res.imgpath+' alt="" height="80px">';
+                        str = str + '<button class="layui-btn  layui-btn-mini layui-btn-danger del_img">';
+                        str = str + '<i class="layui-icon">&#xe640;</i></button></span>';
+
+                        $("#category_img").append(str);
+                        $(".img_name").val(res.imgpath);
+                    }
+
                 },500);
             }
             ,error: function(){

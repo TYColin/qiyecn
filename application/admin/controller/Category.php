@@ -38,7 +38,7 @@ class Category extends Common
 
         if ($request->isPost()){
             $data = $request->post();
-
+            unset($data['imgfile']);
             $result = CategoryModel::create($data);
             if ($result){
                 $this->success('栏目添加成功');
@@ -106,7 +106,21 @@ class Category extends Common
     }
 
     //上传栏目图片
-    public function uploadimg(){
-        return json(['msg'=>'上传成功']);
+    public function uploadimg(Request $request){
+        //获取文件对象
+        $file = $request->file('imgfile');
+        //移动到框架根目录/public/uploads/下
+        if ($file){
+            $info = $file->move(ROOT_PATH . 'public' . DS . 'uploads');
+            if ($info){
+                //获取图片路径,在php中使用 "\" 时，需在加转义字符 "\"
+                // "/"表示项目根目录，"./"表示上级目录
+                $imgpath = '/uploads/'.$info->getSaveName();
+            }
+            return json(['msg'=>'上传成功','code'=>1,'imgpath'=>$imgpath]);
+        }else{
+            return json(['msg'=>'上传失败','code'=>0]);
+        }
+
     }
 }
